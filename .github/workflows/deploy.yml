@@ -14,25 +14,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup Node.js
+    - name: Setup Node.js (only if needed for build tools)
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
-    - name: Install dependencies (if any)
-      run: npm install
-      working-directory: ./frontend
-
-    - name: Build frontend
+    - name: Create dist directory and copy frontend files
       run: |
-        if [ -f "package.json" ]; then
-          npm run build
-        else
-          echo "No build script needed"
-          mkdir -p dist
-          cp -r frontend/* dist/
-        fi
-      working-directory: .
+        mkdir -p dist
+        cp -r frontend/* dist/
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
