@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainstorming Ergebnis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .original-idea {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .requirements-list, .risks-list, .tasks-list, .tests-list, .prompts-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .requirements-list li, .risks-list li, .tasks-list li, .tests-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .fr, .nfr {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .fr {
+            color: #27ae60;
+        }
+        .nfr {
+            color: #e74c3c;
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .prompt-content {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 3px solid #6c757d;
+            white-space: pre-wrap;
+        }
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Brainstorming Ergebnis</h1>
+        
+        <div class="original-idea">
+            <strong>Ihre ursprüngliche Idee:</strong> {{ idea|e }}
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">1. Problem Statement</h2>
+            <p>{{ result.problem_statement|e }}</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">2. Ziele & KPIs</h2>
+            <p>{{ result.goals_kpis|e }}</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">3. Funktionale Anforderungen</h2>
+            <ul class="requirements-list">
+                {% for line in result.functional_requirements.split('\n') if line.strip() %}
+                <li>
+                    {% if 'FR-' in line %}
+                        <span class="fr">{{ line.split(':')[0] }}:</span> 
+                        {{ line.split(':', 1)[1]|e if ':' in line else line|e }}
+                    {% else %}
+                        {{ line|e }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">4. Nicht-funktionale Anforderungen</h2>
+            <ul class="requirements-list">
+                {% for line in result.nonfunctional_requirements.split('\n') if line.strip() %}
+                <li>
+                    {% if 'NFR-' in line %}
+                        <span class="nfr">{{ line.split(':')[0] }}:</span> 
+                        {{ line.split(':', 1)[1]|e if ':' in line else line|e }}
+                    {% else %}
+                        {{ line|e }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">5. Risiken & Annahmen</h2>
+            <div class="risks-list">
+                {{ result.risks_assumptions|e|replace('\n', '<br>')|safe }}
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">6. Umsetzungspotenzial</h2>
+            <p>{{ result.implementation_potential|e|replace('\n', '<br>')|safe }}</p>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">7. Task-Liste</h2>
+            <ul class="tasks-list">
+                {% for line in result.task_list.split('\n') if line.strip() %}
+                <li>{{ line|e }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">8. Test-Ideen</h2>
+            <ul class="tests-list">
+                {% for line in result.test_ideas.split('\n') if line.strip() %}
+                <li>{{ line|e }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">9. Prompts für nachgelagerte Skills</h2>
+            <div class="prompts-list">
+                <h3>Prompt für Planer-Skill:</h3>
+                <div class="prompt-content">{{ result.followup_prompts.prompt_planner|e }}</div>
+                
+                <h3>Prompt für Architektur-Skill:</h3>
+                <div class="prompt-content">{{ result.followup_prompts.prompt_architect|e }}</div>
+                
+                <h3>Prompt für Entwickler-Skill:</h3>
+                <div class="prompt-content">{{ result.followup_prompts.prompt_dev|e }}</div>
+            </div>
+        </div>
+        
+        <div class="back-btn">
+            <a href="{{ url_for('index') }}" class="btn">Zurück zum Brainstorming</a>
+        </div>
+    </div>
+</body>
+</html>

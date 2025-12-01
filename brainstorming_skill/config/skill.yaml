@@ -1,0 +1,94 @@
+name: brainstorm_llm
+version: 1.0
+description: "Generates structured technical requirements, risks, assumptions, and implementation plans from vague ideas using advanced reasoning techniques (Tree-of-Thoughts and Graph-of-Thoughts)."
+
+inputs:
+  - id: idea
+    label: "Idee / Feature-Beschreibung"
+    type: string
+    required: true
+    description: "Freitext-Beschreibung der Idee oder des Features."
+
+  - id: context
+    label: "Kontext"
+    type: string
+    required: false
+    description: "Systemkontext, vorhandene Architektur, Constraints, Stakeholder."
+
+  - id: focus
+    label: "Fokus"
+    type: string
+    required: false
+    enum:
+      - "allgemein"
+      - "architektur"
+      - "tests"
+      - "datenmodell"
+      - "plan"
+    description: "Optionaler Fokusbereich für die Brainstorm-Antwort."
+
+  - id: round_info
+    label: "Iterations-Info"
+    type: string
+    required: false
+    description: "Kurzinfo zur Iteration (z. B. 'Iteration 2, Feedback eingearbeitet zu XYZ')."
+
+outputs:
+  - id: problem_statement
+    type: string
+    description: "Zusammenfassung der Idee in 2-4 Sätzen."
+    
+  - id: goals_kpis
+    type: string
+    description: "Ziele und KPIs in Listenform."
+    
+  - id: functional_requirements
+    type: string
+    description: "Liste FR-n (H/M/L) mit testbaren Anforderungen."
+    
+  - id: nonfunctional_requirements
+    type: string
+    description: "Liste NFR-n (H/M/L)."
+    
+  - id: risks_assumptions
+    type: string
+    description: "Risiken und Annahmen."
+    
+  - id: implementation_potential
+    type: string
+    description: "Vorschläge für Architekturkomponenten und Phasen."
+    
+  - id: task_list
+    type: string
+    description: "High-Level-Tasks mit Referenzen auf FR/NFR."
+    
+  - id: test_ideas
+    type: string
+    description: "Liste von Test-Ideen (TS-n)."
+    
+  - id: followup_prompts
+    type: object
+    fields:
+      - id: prompt_planner
+        type: string
+      - id: prompt_architect
+        type: string
+      - id: prompt_dev
+        type: string
+    description: "Prompts für nachgelagerte LLM-Skills."
+
+llm:
+  model: llama3.2:latest
+  temperature: 0.7
+  max_tokens: 4096
+  system_prompt_ref: "brainstorm_system_prompt.txt"
+
+metadata:
+  owner: "Superpowers – Project Orchestrator"
+  tags:
+    - "requirements"
+    - "prompt-generation"
+    - "brainstorm"
+    - "planning"
+    - "tree-of-thoughts"
+    - "graph-of-thoughts"
