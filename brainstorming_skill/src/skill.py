@@ -1,77 +1,14 @@
 import json
 from typing import Dict, Any, List
-from .graph_of_thoughts import run_full_tot_then_got
-from .visualization import render_mermaid, generate_thought_summary, generate_hybrid_summary
 
 def execute_brainstorm_skill(inputs: Dict[str, Any], use_mock: bool = False) -> Dict[str, Any]:
     """
     Execute the brainstorming skill with the given inputs.
-
-    Args:
-        inputs: Dictionary containing the skill inputs as defined in skill.yaml
-        use_mock: If True, use mock data instead of calling the LLM
-
-    Returns:
-        Dictionary containing the skill outputs as defined in skill.yaml
+    This function now uses the enhanced version with project management features.
     """
-    # Extract inputs
-    idea = inputs.get("idea", "")
-    context = inputs.get("context", "")
-    focus = inputs.get("focus", "allgemein")
-    round_info = inputs.get("round_info", "")
-
-    # Combine idea and context for the task
-    if context:
-        task = f"{idea}\n\nKontext: {context}"
-    else:
-        task = idea
-
-    # Run the ToT->GoT pipeline
-    pipeline_result = run_full_tot_then_got(task, use_mock=use_mock)
-
-    # Extract components
-    tot_thoughts = pipeline_result["tot_thoughts"]
-    got_result = pipeline_result["got_result"]
-    final_hybrid = pipeline_result["final_hybrid"]
-
-    # Generate problem statement
-    problem_statement = generate_problem_statement(idea, context)
-
-    # Generate goals and KPIs
-    goals_kpis = generate_goals_and_kpis(idea)
-
-    # Generate functional and non-functional requirements
-    functional_requirements, nonfunctional_requirements = generate_requirements(tot_thoughts, final_hybrid)
-
-    # Generate risks and assumptions
-    risks_assumptions = generate_risks_and_assumptions()
-
-    # Generate implementation potential
-    implementation_potential = generate_implementation_potential(tot_thoughts, final_hybrid)
-
-    # Generate task list
-    task_list = generate_task_list(tot_thoughts, final_hybrid)
-
-    # Generate test ideas
-    test_ideas = generate_test_ideas(tot_thoughts, final_hybrid)
-
-    # Generate follow-up prompts
-    followup_prompts = generate_followup_prompts(idea, context, final_hybrid)
-
-    # Format the response
-    outputs = {
-        "problem_statement": problem_statement,
-        "goals_kpis": goals_kpis,
-        "functional_requirements": functional_requirements,
-        "nonfunctional_requirements": nonfunctional_requirements,
-        "risks_assumptions": risks_assumptions,
-        "implementation_potential": implementation_potential,
-        "task_list": task_list,
-        "test_ideas": test_ideas,
-        "followup_prompts": followup_prompts
-    }
-
-    return outputs
+    # Import and use the enhanced version
+    from ..enhanced_skills.integration import execute_brainstorm_skill_with_enhancements
+    return execute_brainstorm_skill_with_enhancements(inputs, use_mock)
 
 def generate_problem_statement(idea: str, context: str) -> str:
     """Generate the problem statement based on the idea and context."""
