@@ -1,5 +1,10 @@
 // app.js - Frontend-Logik für den Brainstorming Assistant
 
+// Konfiguration: Backend-URL (kann überschrieben werden)
+// Setzen Sie BACKEND_URL als Umgebungsvariable oder passen Sie die URL hier an
+const BACKEND_URL = window.BACKEND_URL || 'http://localhost:5000';
+const USE_MOCK_DATA = window.USE_MOCK_DATA !== undefined ? window.USE_MOCK_DATA : true;
+
 // Funktion zum Senden der Brainstorming-Anfrage an die API
 async function submitBrainstorm(idea, context, focus, files) {
     // Anzeige des Ladezustands
@@ -21,9 +26,9 @@ async function submitBrainstorm(idea, context, focus, files) {
     const fullContext = context + fileContent;
 
     try {
-        // API-Aufruf an Backend (in einer echten Implementierung)
-        // Hier verwenden wir einen Mock-Endpunkt für die Demonstration
-        const response = await fetch('https://brainstorm-backend.example.com/api/brainstorm', {
+        // API-Aufruf an Backend
+        const apiUrl = `${BACKEND_URL}/api/brainstorm`;
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,6 +56,8 @@ async function submitBrainstorm(idea, context, focus, files) {
                 <h2>Fehler beim Verarbeiten der Anfrage</h2>
                 <p>${error.message}</p>
                 <p>Bitte überprüfen Sie, ob das Backend ordnungsgemäß läuft und die API-URL korrekt ist.</p>
+                <p><strong>Backend-URL:</strong> ${BACKEND_URL}</p>
+                <p><em>Tipp: Starten Sie das Backend mit "python brainstorming_ui.py" im Hauptverzeichnis.</em></p>
                 <a href="index.html" class="btn">Zurück zum Formular</a>
             </div>
         `;
@@ -198,36 +205,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                // In einer echten Implementierung würde hier die API
-                // tatsächlich aufgerufen, aber für die Demonstration
-                // verwenden wir Mock-Daten
-                const mockResult = {
-                    problem_statement: `### Situation\n${idea}\n\n### Hintergrund\n${context}\n\n### Ziel\nEntwicklung einer Lösung zur Umsetzung der beschriebenen Anforderungen`,
-                    goals_kpis: `## Hauptziele\n\n- Effiziente Umsetzung der Kernfunktionalitäten\n- Benutzerfreundliche Interaktion mit der Anwendung\n\n## KPIs\n\n- Benutzerakzeptanzrate > 80%\n- Antwortzeit < 2 Sekunden\n- Systemverfügbarkeit > 99.5%`,
-                    functional_requirements: `### Must-Have Anforderungen\n\nFR-1 (H): Das System SOLLTE eine intuitive Benutzeroberfläche bieten, um eine einfache Bedienung sicherzustellen\n\nFR-2 (H): Das System MUSS in der Lage sein, Benutzerdaten sicher zu speichern und zu verwalten\n\n### Should-Have Anforderungen\n\nFR-3 (S): Das System SOLLTE eine Suchfunktion bereitstellen\n\nFR-4 (S): Das System SOLLTE Benachrichtigungen bei wichtigen Ereignissen senden\n\n### Could-Have Anforderungen\n\nFR-5 (C): Das System KÖNNTE eine Offline-Funktionalität bieten\n\nFR-6 (C): Das System KÖNNTE eine Sprachsteuerung unterstützen`,
-                    nonfunctional_requirements: `### Performance-Anforderungen\n\nNFR-1 (H): Das System MUSS innerhalb von 2 Sekunden auf Benutzereingaben reagieren\n\nNFR-2 (M): Das System SOLLTE eine Last von bis zu 1000 gleichzeitigen Benutzern verarbeiten können\n\n### Sicherheitsanforderungen\n\nNFR-3 (H): Der Datenschutz MUSS gemäß DSGVO gewährleistet sein\n\nNFR-4 (M): Zugriffe AUF sensible Daten MÜSSEN authentifiziert sein\n\n### Verfügbarkeitsanforderungen\n\nNFR-5 (H): Das System SOLLTE eine Verfügbarkeit von 99.9% bieten`,
-                    risks_assumptions: `## Risiken\n\n- RISIKO-1: Die technische Umsetzbarkeit mancher Anforderungen könnte komplexer sein als ursprünglich eingeschätzt\n  - Gegenmaßnahme: Durchführung von Proof-of-Concept-Tests vor der Hauptentwicklung\n\n- RISIKO-2: Ein Mangel an qualifizierten Entwicklern könnte das Projekt verzögern\n  - Gegenmaßnahme: Frühzeitige Rekrutierung und Schulung von Personal\n\n## Annahmen\n\n- ANNAHME-1: Der Benutzer hat regelmäßigen Zugang zu einer Internetverbindung\n\n- ANNAHME-2: Die notwendigen externen Schnittstellen (z.B. Zahlungsdienste) sind stabil verfügbar`,
-                    implementation_potential: `## Architekturansatz\n\n- Modulare Architektur mit klaren Schnittstellen\n- Nutzung von Microservices für Skalierbarkeit\n\n## Technologieempfehlungen\n\n- Backend: Node.js/Express oder Python/Django\n- Frontend: React oder Vue.js\n- Datenbank: PostgreSQL oder MongoDB\n\n## Phasenplanung\n\n- Phase 1: Prototypentwicklung (2 Wochen)\n- Phase 2: MVP-Implementierung (6 Wochen)\n- Phase 3: Erweiterte Funktionen und Tests (4 Wochen)\n- Phase 4: Bereitstellung und Einführung (2 Wochen)`,
-                    task_list: `### Phase 1: Projektvorbereitung\n\nT1.1: Anforderungsanalyse (2 Tage)\nT1.2: Technologieentscheidung (1 Tag)\nT1.3: Projektplanung (1 Tag)\n\n### Phase 2: Architektur und Design\n\nT2.1: Systemarchitektur festlegen (2 Tage)\nT2.2: Datenbankschema entwerfen (2 Tage)\nT2.3: UI/UX-Design erstellen (3 Tage)\n\n### Phase 3: Implementierung\n\nT3.1: Backend-Basis implementieren (5 Tage)\nT3.2: Frontend-Basis implementieren (4 Tage)\nT3.3: API-Integration durchführen (3 Tage)`,
-                    test_ideas: `### Unit-Tests\n\nTS-1: Test der Geschäftslogik (Unit) - Stellt sicher, dass Algorithmen korrekt funktionieren\n\nTS-2: Test der Datenbankschicht (Unit) - Verifiziert korrekte Speicherung und Abruf von Daten\n\n### Integrationstests\n\nTS-3: API-Endpunkte testen (Integration) - Überprüft korrekte Kommunikation zwischen Frontend und Backend\n\nTS-4: Authentifizierung testen (Integration) - Stellt sichere Benutzerauthentifizierung sicher\n\n### E2E-Tests\n\nTS-5: Benutzerworkflow testen (E2E) - Überprüft vollständige Benutzerabläufe\n\nTS-6: Belastungstest (E2E) - Validiert Systemverhalten unter Last`,
-                    followup_prompts: {
-                        prompt_planner: `Erstelle einen detaillierten Entwicklungsplan für: ${idea}. Kontext: ${context}. Bitte strukturiere den Plan in Phasen mit klaren Meilensteinen, Zeitplänen und Ressourcenbedarf.`,
-                        prompt_architect: `Entwirf die Systemarchitektur für: ${idea}. Gegeben ist folgender Kontext: ${context}. Bitte berücksichtige Skalierbarkeit, Sicherheit und Wartbarkeit in der Architektur.`,
-                        prompt_dev: `Erstelle eine Entwicklungsstrategie und erste Implementierungsschritte für: ${idea}. Kontext: ${context}. Bitte empfehle spezifische Technologien und Frameworks sowie eine geeignete Vorgehensweise.`
-                    }
-                };
+                let result;
 
-                // Simuliere API-Verzögerung
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                // Verwende Mock-Daten wenn konfiguriert, ansonsten echte API
+                if (USE_MOCK_DATA) {
+                    console.log('Verwende Mock-Daten für Demo-Zwecke');
+                    await new Promise(resolve => setTimeout(resolve, 1500)); // Simuliere API-Verzögerung
+                    result = generateMockResult(idea, context);
+                } else {
+                    console.log('Rufe Backend-API auf:', BACKEND_URL);
+                    result = await submitBrainstorm(idea, context, focus, files);
+                }
 
                 // Zeige die Ergebnisse an
-                displayResult(mockResult, idea);
-
-                // Optional: In einer echten Implementierung würde hier die echte API aufgerufen:
-                /*
-                const result = await submitBrainstorm(idea, context, focus, files);
                 displayResult(result, idea);
-                */
+
             } catch (error) {
                 console.error('Fehler:', error);
                 // Fehlerbehandlung wird bereits in submitBrainstorm durchgeführt
@@ -245,3 +237,22 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Hilfsfunktion zum Generieren von Mock-Daten für Demo-Zwecke
+function generateMockResult(idea, context) {
+    return {
+        problem_statement: `### Situation\n${idea}\n\n### Hintergrund\n${context}\n\n### Ziel\nEntwicklung einer Lösung zur Umsetzung der beschriebenen Anforderungen`,
+        goals_kpis: `## Hauptziele\n\n- Effiziente Umsetzung der Kernfunktionalitäten\n- Benutzerfreundliche Interaktion mit der Anwendung\n\n## KPIs\n\n- Benutzerakzeptanzrate > 80%\n- Antwortzeit < 2 Sekunden\n- Systemverfügbarkeit > 99.5%`,
+        functional_requirements: `### Must-Have Anforderungen\n\nFR-1 (H): Das System SOLLTE eine intuitive Benutzeroberfläche bieten, um eine einfache Bedienung sicherzustellen\n\nFR-2 (H): Das System MUSS in der Lage sein, Benutzerdaten sicher zu speichern und zu verwalten\n\n### Should-Have Anforderungen\n\nFR-3 (S): Das System SOLLTE eine Suchfunktion bereitstellen\n\nFR-4 (S): Das System SOLLTE Benachrichtigungen bei wichtigen Ereignissen senden\n\n### Could-Have Anforderungen\n\nFR-5 (C): Das System KÖNNTE eine Offline-Funktionalität bieten\n\nFR-6 (C): Das System KÖNNTE eine Sprachsteuerung unterstützen`,
+        nonfunctional_requirements: `### Performance-Anforderungen\n\nNFR-1 (H): Das System MUSS innerhalb von 2 Sekunden auf Benutzereingaben reagieren\n\nNFR-2 (M): Das System SOLLTE eine Last von bis zu 1000 gleichzeitigen Benutzern verarbeiten können\n\n### Sicherheitsanforderungen\n\nNFR-3 (H): Der Datenschutz MUSS gemäß DSGVO gewährleistet sein\n\nNFR-4 (M): Zugriffe AUF sensible Daten MÜSSEN authentifiziert sein\n\n### Verfügbarkeitsanforderungen\n\nNFR-5 (H): Das System SOLLTE eine Verfügbarkeit von 99.9% bieten`,
+        risks_assumptions: `## Risiken\n\n- RISIKO-1: Die technische Umsetzbarkeit mancher Anforderungen könnte komplexer sein als ursprünglich eingeschätzt\n  - Gegenmaßnahme: Durchführung von Proof-of-Concept-Tests vor der Hauptentwicklung\n\n- RISIKO-2: Ein Mangel an qualifizierten Entwicklern könnte das Projekt verzögern\n  - Gegenmaßnahme: Frühzeitige Rekrutierung und Schulung von Personal\n\n## Annahmen\n\n- ANNAHME-1: Der Benutzer hat regelmäßigen Zugang zu einer Internetverbindung\n\n- ANNAHME-2: Die notwendigen externen Schnittstellen (z.B. Zahlungsdienste) sind stabil verfügbar`,
+        implementation_potential: `## Architekturansatz\n\n- Modulare Architektur mit klaren Schnittstellen\n- Nutzung von Microservices für Skalierbarkeit\n\n## Technologieempfehlungen\n\n- Backend: Node.js/Express oder Python/Django\n- Frontend: React oder Vue.js\n- Datenbank: PostgreSQL oder MongoDB\n\n## Phasenplanung\n\n- Phase 1: Prototypentwicklung (2 Wochen)\n- Phase 2: MVP-Implementierung (6 Wochen)\n- Phase 3: Erweiterte Funktionen und Tests (4 Wochen)\n- Phase 4: Bereitstellung und Einführung (2 Wochen)`,
+        task_list: `### Phase 1: Projektvorbereitung\n\nT1.1: Anforderungsanalyse (2 Tage)\nT1.2: Technologieentscheidung (1 Tag)\nT1.3: Projektplanung (1 Tag)\n\n### Phase 2: Architektur und Design\n\nT2.1: Systemarchitektur festlegen (2 Tage)\nT2.2: Datenbankschema entwerfen (2 Tage)\nT2.3: UI/UX-Design erstellen (3 Tage)\n\n### Phase 3: Implementierung\n\nT3.1: Backend-Basis implementieren (5 Tage)\nT3.2: Frontend-Basis implementieren (4 Tage)\nT3.3: API-Integration durchführen (3 Tage)`,
+        test_ideas: `### Unit-Tests\n\nTS-1: Test der Geschäftslogik (Unit) - Stellt sicher, dass Algorithmen korrekt funktionieren\n\nTS-2: Test der Datenbankschicht (Unit) - Verifiziert korrekte Speicherung und Abruf von Daten\n\n### Integrationstests\n\nTS-3: API-Endpunkte testen (Integration) - Überprüft korrekte Kommunikation zwischen Frontend und Backend\n\nTS-4: Authentifizierung testen (Integration) - Stellt sichere Benutzerauthentifizierung sicher\n\n### E2E-Tests\n\nTS-5: Benutzerworkflow testen (E2E) - Überprüft vollständige Benutzerabläufe\n\nTS-6: Belastungstest (E2E) - Validiert Systemverhalten unter Last`,
+        followup_prompts: {
+            prompt_planner: `Erstelle einen detaillierten Entwicklungsplan für: ${idea}. Kontext: ${context}. Bitte strukturiere den Plan in Phasen mit klaren Meilensteinen, Zeitplänen und Ressourcenbedarf.`,
+            prompt_architect: `Entwirf die Systemarchitektur für: ${idea}. Gegeben ist folgender Kontext: ${context}. Bitte berücksichtige Skalierbarkeit, Sicherheit und Wartbarkeit in der Architektur.`,
+            prompt_dev: `Erstelle eine Entwicklungsstrategie und erste Implementierungsschritte für: ${idea}. Kontext: ${context}. Bitte empfehle spezifische Technologien und Frameworks sowie eine geeignete Vorgehensweise.`
+        }
+    };
+}
