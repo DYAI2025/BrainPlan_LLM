@@ -82,6 +82,21 @@ textarea {
     background-color: #2980b9;
 }
 
+.btn-secondary {
+    background-color: #95a5a6;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
 .section {
     margin-bottom: 30px;
     padding-bottom: 20px;
@@ -93,6 +108,62 @@ textarea {
     border-bottom: 2px solid #3498db;
     padding-bottom: 5px;
     margin-bottom: 15px;
+}
+
+.result-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fafafa;
+}
+
+.result-section h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #34495e;
+    font-size: 1.2em;
+}
+
+.result-section h3:first-child {
+    margin-top: 0;
+}
+
+.content-section {
+    padding: 15px;
+    background-color: white;
+    border-radius: 5px;
+    border-left: 3px solid #3498db;
+}
+
+.content-section p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.requirements-container, .list-container {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 3px solid #95a5a6;
+}
+
+.requirement-item, .list-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.requirement-item:last-child, .list-item:last-child {
+    border-bottom: none;
+}
+
+.prompts-section {
+    margin-top: 20px;
+}
+
+.prompts-section h3 {
+    margin-top: 15px;
+    margin-bottom: 8px;
 }
 
 .requirements-list, .risks-list, .tasks-list, .tests-list {

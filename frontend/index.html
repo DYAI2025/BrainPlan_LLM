@@ -12,19 +12,19 @@
             <h1>Brainstorming Assistant</h1>
             <p>Transformieren Sie Ihre Ideen in strukturierte Entwicklungspläne</p>
         </header>
-        
+
         <main>
             <form id="brainstormForm">
                 <div class="form-group">
                     <label for="idea">Ihre Idee oder Anforderung:</label>
                     <textarea id="idea" name="idea" placeholder="Beschreiben Sie hier Ihre Idee, Anforderung oder das Problem, das gelöst werden soll..." required></textarea>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="context">Zusätzlicher Kontext (optional):</label>
                     <textarea id="context" name="context" placeholder="Zusätzlicher Kontext wie bestehende Systeme, Technologie-Stack, Einschränkungen, Stakeholder-Anforderungen etc."></textarea>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="focus">Fokus-Bereich (optional):</label>
                     <select id="focus" name="focus">
@@ -35,7 +35,7 @@
                         <option value="plan">Planung</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Dateien hochladen (optional):</label>
                     <div class="file-upload">
@@ -43,8 +43,11 @@
                         <p><small>Unterstützte Formate: TXT, PDF, DOCX, MD, CSV, JSON</small></p>
                     </div>
                 </div>
-                
-                <button type="submit" class="btn">Brainstorming durchführen</button>
+
+                <div class="button-group">
+                    <button type="submit" class="btn">Brainstorming durchführen</button>
+                    <button type="button" id="clearBtn" class="btn btn-secondary">Formular leeren</button>
+                </div>
             </form>
         </main>
     </div>
